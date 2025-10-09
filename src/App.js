@@ -10,6 +10,8 @@ import GallerySection from './components/sections/GallerySection';
 import CustomerExperienceSection from './components/sections/CustomerExperienceSection';
 import ContactSection from './components/sections/ContactSection';
 import UtilityPage from './pages/UtilityPage';
+import ServicePage from './pages/ServicePage';
+import PrivateOfficeDetailPage from './pages/PrivateOfficeDetailPage';
 
 // HomePage component to consolidate the main landing page sections
 const HomePage = () => {
@@ -36,6 +38,8 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/utility" element={<UtilityPage />} />
+          <Route path="/service" element={<ServicePage />} />
+          <Route path="/service/private-office" element={<PrivateOfficeDetailPage />} />
         </Routes>
       </div>
     </Router>

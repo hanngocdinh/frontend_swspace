@@ -236,6 +236,66 @@ const SpaceCard = styled.div`
   }
 `;
 
+// Community Section
+const CommunitySection = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  background-color: #f9f9f7;
+  padding: 3rem;
+  border-radius: 8px;
+  margin-top: 2rem;
+  
+  @media (max-width: 768px) {
+    padding: 2rem 1rem;
+  }
+`;
+
+const CommunityContent = styled.div`
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: left;
+  
+  h3 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    color: #333;
+  }
+  
+  p {
+    color: #555;
+    line-height: 1.7;
+    margin-bottom: 1rem;
+  }
+`;
+
+const CommunityImagesGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  
+  img {
+    width: 100%;
+    border-radius: 8px;
+    height: 240px;
+    object-fit: cover;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    
+    &:hover {
+      transform: translateY(-5px);
+    }
+  }
+  
+  @media (max-width: 992px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
 const UtilityPage = () => {
   return (
     <PageContainer>
@@ -247,7 +307,7 @@ const UtilityPage = () => {
             {/* Working 24/7 Section */}
             <WorkingSection>
               <WorkingImage 
-                src="https://res.cloudinary.com/dvwp5td6y/image/upload/v1759941785/working-247_hcbrr5.jpg" 
+                src="https://res.cloudinary.com/dvwp5td6y/image/upload/v1759938995/Screenshot_2025-10-06_160257_bsw3j6.png" 
                 alt="Working 24/7 at SWSpace" 
               />
               <WorkingContent>
@@ -267,7 +327,7 @@ const UtilityPage = () => {
                 </p>
               </LocationContent>
               <LocationImage 
-                src="https://res.cloudinary.com/dvwp5td6y/image/upload/v1759941785/prime-location_yssv0v.jpg" 
+                src="https://res.cloudinary.com/dvwp5td6y/image/upload/v1759943395/Screenshot_2025-10-07_192026_fokwli.png" 
                 alt="Prime location of SWSpace" 
               />
             </LocationSection>
@@ -276,7 +336,7 @@ const UtilityPage = () => {
             <DoubleFeatureSection>
               <FeatureCard>
                 <img 
-                  src="https://res.cloudinary.com/dvwp5td6y/image/upload/v1759941784/high-speed-internet_nlcmlq.jpg" 
+                  src="https://res.cloudinary.com/dvwp5td6y/image/upload/v1759943438/Screenshot_2025-10-09_001010_gp1jxt.png" 
                   alt="High-speed Internet" 
                 />
                 <h3>High-speed Internet</h3>
@@ -286,7 +346,7 @@ const UtilityPage = () => {
               </FeatureCard>
               <FeatureCard>
                 <img 
-                  src="https://res.cloudinary.com/dvwp5td6y/image/upload/v1759941783/flexible-cost-effective_hfhets.jpg" 
+                  src="https://res.cloudinary.com/dvwp5td6y/image/upload/v1759943491/Screenshot_2025-10-09_001113_irbzga.png" 
                   alt="Flexible & cost-effective space" 
                 />
                 <h3>Flexible & cost-effective</h3>
@@ -302,7 +362,7 @@ const UtilityPage = () => {
               <ServicesGrid>
                 <ServiceCard>
                   <img 
-                    src="https://res.cloudinary.com/dvwp5td6y/image/upload/v1759941783/free-drinks_csjy3j.jpg" 
+                    src="https://res.cloudinary.com/dvwp5td6y/image/upload/v1759943523/Screenshot_2025-10-07_192637_eahf2v.png" 
                     alt="Free drinks at SWSpace" 
                   />
                   <h4>Free drinks</h4>
@@ -310,7 +370,7 @@ const UtilityPage = () => {
                 </ServiceCard>
                 <ServiceCard>
                   <img 
-                    src="https://res.cloudinary.com/dvwp5td6y/image/upload/v1759941784/printing-copying_wnbyog.jpg" 
+                    src="https://res.cloudinary.com/dvwp5td6y/image/upload/v1759943561/Screenshot_2025-10-09_001228_sfzxxj.png" 
                     alt="Printing and copying services" 
                   />
                   <h4>Printing and convenient copying</h4>
@@ -318,7 +378,7 @@ const UtilityPage = () => {
                 </ServiceCard>
                 <ServiceCard>
                   <img 
-                    src="https://res.cloudinary.com/dvwp5td6y/image/upload/v1759941784/receptionist_e6kjzw.jpg" 
+                    src="https://res.cloudinary.com/dvwp5td6y/image/upload/v1759943614/Screenshot_2025-10-09_001323_bq51eh.png" 
                     alt="Professional receptionist" 
                   />
                   <h4>Professional receptionist</h4>
@@ -333,14 +393,14 @@ const UtilityPage = () => {
               <SpacesGrid>
                 <SpaceCard>
                   <img 
-                    src="https://res.cloudinary.com/dvwp5td6y/image/upload/v1759941784/pantry-area_wpyhlz.jpg" 
+                    src="https://res.cloudinary.com/dvwp5td6y/image/upload/v1759943692/Screenshot_2025-10-09_001429_ksy3w8.png" 
                     alt="Pantry Area at SWSpace" 
                   />
                   <h4>Pantry Area</h4>
                 </SpaceCard>
                 <SpaceCard>
                   <img 
-                    src="https://res.cloudinary.com/dvwp5td6y/image/upload/v1759941784/meeting-room_kegdci.jpg" 
+                    src="https://res.cloudinary.com/dvwp5td6y/image/upload/v1759943743/Screenshot_2025-10-09_001515_keypi0.png" 
                     alt="Meeting room at SWSpace" 
                   />
                   <h4>Meeting room</h4>
@@ -348,12 +408,39 @@ const UtilityPage = () => {
               </SpacesGrid>
               <DiscussionArea>
                 <img 
-                  src="https://res.cloudinary.com/dvwp5td6y/image/upload/v1759941783/discussion-area_v1kzw0.jpg" 
+                  src="https://res.cloudinary.com/dvwp5td6y/image/upload/v1759943802/Screenshot_2025-10-09_001623_fdidri.png" 
                   alt="General discussion area" 
                 />
                 <h4>General discussion area</h4>
               </DiscussionArea>
             </ProfessionalSpaceSection>
+
+            {/* Community Section */}
+            <CommunitySection>
+              <CommunityContent>
+                <h3>A place where every connection begins and the community is nurtured</h3>
+                <p>
+                  At SWSpace, we not only create a workplace but also build a vibrant community of young entrepreneurs – a place where valuable connections naturally form through conversations, sharing, and collaborations.
+                </p>
+                <p>
+                  Community events organized by SWSpace are special occasions for customers to be appreciated, connected, and to spread the spirit of creativity in a modern, open, and warm working environment.
+                </p>
+              </CommunityContent>
+              <CommunityImagesGrid>
+                <img 
+                  src="https://res.cloudinary.com/dvwp5td6y/image/upload/v1759943840/Screenshot_2025-10-09_001706_rrr4yu.png" 
+                  alt="Community workspace" 
+                />
+                <img 
+                  src="https://res.cloudinary.com/dvwp5td6y/image/upload/v1759943887/Screenshot_2025-10-09_001749_e1cmxb.png" 
+                  alt="Collaborative environment" 
+                />
+                <img 
+                  src="https://res.cloudinary.com/dvwp5td6y/image/upload/v1759943951/Screenshot_2025-10-09_001857_ppq1b9.png" 
+                  alt="Community events" 
+                />
+              </CommunityImagesGrid>
+            </CommunitySection>
           </FeaturesLayout>
         </SectionContainer>
       </MainContent>

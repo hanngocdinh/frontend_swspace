@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-scroll';
+import { Link as RouterLink } from 'react-router-dom';
 import { FaBars } from 'react-icons/fa';
 
 const HeaderContainer = styled.header`
@@ -158,14 +159,14 @@ const Header = () => {
             </Link>
           </NavItem>
           <NavItem>
-            <Link to="utility" smooth={true} duration={500} onClick={() => setIsOpen(false)}>
+            <RouterLink to="/utility" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setIsOpen(false)}>
               Utility
-            </Link>
+            </RouterLink>
           </NavItem>
           <NavItem>
-            <Link to="service" smooth={true} duration={500} onClick={() => setIsOpen(false)}>
+            <RouterLink to="/service" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setIsOpen(false)}>
               Service
-            </Link>
+            </RouterLink>
           </NavItem>
           <NavItem>
             <Link to="contact" smooth={true} duration={500} onClick={() => setIsOpen(false)}>
