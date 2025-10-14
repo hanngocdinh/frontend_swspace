@@ -14,6 +14,8 @@ import MainServicePage from './pages/ServicePage';
 import PrivateOfficeDetailPage from './pages/PrivateOfficeDetailPage';
 import FixedDeskDetailPage from './pages/FixedDeskDetailPage';
 import HotDeskDetailPage from './pages/HotDeskDetailPage';
+import MeetingRoomDetailPage from './pages/MeetingRoomDetailPage';
+import NetworkingSpaceDetailPage from './pages/NetworkingSpaceDetailPage';
 import LoginPage from './pages/auth/LoginPage';
 import ServicePage from './pages/booking/ServicePage';
 import PackageDurationPage from './pages/booking/PackageDurationPage';
@@ -66,6 +68,8 @@ function App() {
               <Route path="/service/private-office" element={<PrivateOfficeDetailPage />} />
               <Route path="/service/fixed-desk" element={<FixedDeskDetailPage />} />
               <Route path="/service/hot-desk" element={<HotDeskDetailPage />} />
+              <Route path="/service/meeting-room" element={<MeetingRoomDetailPage />} />
+              <Route path="/service/networking-space" element={<NetworkingSpaceDetailPage />} />
               
               {/* Auth routes */}
               <Route path="/login" element={<LoginPage />} />

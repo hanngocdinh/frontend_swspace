@@ -242,7 +242,7 @@ const ServicePage = () => {
               />
               <h3>Meeting Room</h3>
               <p>About 200.000 vnđ / hours</p>
-              <ViewDetailButton href="#">
+              <ViewDetailButton as={Link} to="/service/meeting-room">
                 View detail <span className="arrow-icon">→</span>
               </ViewDetailButton>
             </ServiceCard>
@@ -255,7 +255,7 @@ const ServicePage = () => {
             />
             <h3>Networking Space</h3>
             <p>About 3.000.000 VNĐ / 3 hours</p>
-            <ViewDetailButton href="#">
+            <ViewDetailButton as={Link} to="/service/networking-space">
               View detail <span className="arrow-icon">→</span>
             </ViewDetailButton>
           </SingleServiceCard>
