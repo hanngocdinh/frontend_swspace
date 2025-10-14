@@ -128,7 +128,7 @@ const Footer = () => {
             <span className="sw">SW</span>
             <span className="space">Space</span>
           </Logo>
-          <p>550 Nguyen Van Kinh, D1st,<br />District 7, Ho Chi Minh City</p>
+          <p>03 Quang Trung<br /> Da Nang City</p>
           <ContactInfo>
             <p>
               <FaEnvelope />
@@ -136,7 +136,7 @@ const Footer = () => {
             </p>
             <p>
               <FaPhone />
-              0915555456
+              0905965494
             </p>
           </ContactInfo>
         </LogoSection>

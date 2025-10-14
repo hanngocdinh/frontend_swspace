@@ -12,6 +12,8 @@ import ContactSection from './components/sections/ContactSection';
 import UtilityPage from './pages/UtilityPage';
 import ServicePage from './pages/ServicePage';
 import PrivateOfficeDetailPage from './pages/PrivateOfficeDetailPage';
+import FixedDeskDetailPage from './pages/FixedDeskDetailPage';
+import HotDeskDetailPage from './pages/HotDeskDetailPage';
 
 // HomePage component to consolidate the main landing page sections
 const HomePage = () => {
@@ -40,6 +42,8 @@ function App() {
           <Route path="/utility" element={<UtilityPage />} />
           <Route path="/service" element={<ServicePage />} />
           <Route path="/service/private-office" element={<PrivateOfficeDetailPage />} />
+          <Route path="/service/fixed-desk" element={<FixedDeskDetailPage />} />
+          <Route path="/service/hot-desk" element={<HotDeskDetailPage />} />
         </Routes>
       </div>
     </Router>

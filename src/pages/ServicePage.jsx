@@ -202,7 +202,7 @@ const ServicePage = () => {
               />
               <h3>Fixed Desk</h3>
               <p>About 2.950.000 VNĐ / Member / Month</p>
-              <ViewDetailButton href="#">
+              <ViewDetailButton as={Link} to="/service/fixed-desk">
                 View detail <span className="arrow-icon">→</span>
               </ViewDetailButton>
             </ServiceCard>
@@ -214,7 +214,7 @@ const ServicePage = () => {
               />
               <h3>Hot Desk</h3>
               <p>About 2.350.000 VNĐ / Member / Month</p>
-              <ViewDetailButton href="#">
+              <ViewDetailButton as={Link} to="/service/hot-desk">
                 View detail <span className="arrow-icon">→</span>
               </ViewDetailButton>
             </ServiceCard>
