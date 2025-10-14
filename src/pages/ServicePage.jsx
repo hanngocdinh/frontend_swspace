@@ -1,8 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
+import { useAuth } from '../contexts/AuthContext';
+import { useBooking } from '../contexts/BookingContext';
 
 const PageContainer = styled.div`
   display: flex;
@@ -150,7 +152,7 @@ const OptionsContainer = styled.div`
   gap: 1rem;
 `;
 
-const OptionButton = styled.a`
+const OptionButton = styled.button`
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -161,7 +163,6 @@ const OptionButton = styled.a`
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
   cursor: pointer;
-  text-decoration: none;
   transition: all 0.3s ease;
 
   &:hover {
@@ -175,6 +176,21 @@ const OptionButton = styled.a`
 `;
 
 const ServicePage = () => {
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+  const { selectServiceType } = useBooking();
+  
+  const handleServiceTypeSelection = (type) => {
+    if (isAuthenticated()) {
+      // Nếu đã đăng nhập, chuyển đến trang booking với loại dịch vụ đã chọn
+      selectServiceType(type);
+      navigate('/booking/package');
+    } else {
+      // Nếu chưa đăng nhập, chuyển đến trang đăng nhập với redirect path
+      navigate('/login', { state: { from: '/booking/service' } });
+    }
+  };
+  
   return (
     <PageContainer>
       <Header />
@@ -248,8 +264,8 @@ const ServicePage = () => {
             <WelcomeTitle>Welcome to <span>SW</span>Space</WelcomeTitle>
             <OptionsText>Let choose the option</OptionsText>
             <OptionsContainer>
-              <OptionButton href="#" primary>YOU ARE A FREELANCER</OptionButton>
-              <OptionButton href="#">YOU ARE A TEAM</OptionButton>
+              <OptionButton onClick={() => handleServiceTypeSelection('freelancer')} primary>YOU ARE A FREELANCER</OptionButton>
+              <OptionButton onClick={() => handleServiceTypeSelection('team')}>YOU ARE A TEAM</OptionButton>
             </OptionsContainer>
           </WelcomeSection>
           

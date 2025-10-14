@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-scroll';
-import { Link as RouterLink } from 'react-router-dom';
-import { FaBars } from 'react-icons/fa';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { FaBars, FaUser, FaSignOutAlt } from 'react-icons/fa';
+import { useAuth } from '../../contexts/AuthContext';
 
 const HeaderContainer = styled.header`
   background-color: #ffffff;
@@ -86,6 +87,7 @@ const BookButton = styled.a`
   font-weight: bold;
   margin-left: 1rem;
   transition: all 0.3s ease;
+  cursor: pointer;
 
   &:hover {
     background-color: #38a046;
@@ -94,6 +96,61 @@ const BookButton = styled.a`
 
   @media (max-width: 768px) {
     margin: 1rem 0 0;
+  }
+`;
+
+const UserContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-left: 1rem;
+  position: relative;
+`;
+
+const UserButton = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 5px;
+  transition: all 0.3s;
+  
+  &:hover {
+    background-color: #f5f5f5;
+  }
+`;
+
+const UserName = styled.span`
+  font-weight: 500;
+`;
+
+const UserIcon = styled(FaUser)`
+  color: #45bf55;
+`;
+
+const UserDropdown = styled.div`
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  padding: 0.5rem 0;
+  min-width: 150px;
+  display: ${props => props.isOpen ? 'block' : 'none'};
+  z-index: 1001;
+`;
+
+const DropdownItem = styled.div`
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background 0.3s;
+  
+  &:hover {
+    background-color: #f5f5f5;
   }
 `;
 
@@ -110,6 +167,10 @@ const MobileMenuIcon = styled.div`
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+  
+  const { currentUser, logout } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -126,6 +187,24 @@ const Header = () => {
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+  };
+  
+  const toggleUserDropdown = () => {
+    setUserDropdownOpen(!userDropdownOpen);
+  };
+  
+  const handleBookSeat = () => {
+    if (currentUser) {
+      navigate('/booking/service');
+    } else {
+      navigate('/login', { state: { from: '/booking/service' } });
+    }
+  };
+  
+  const handleLogout = () => {
+    logout();
+    setUserDropdownOpen(false);
+    navigate('/');
   };
 
   return (
@@ -173,7 +252,33 @@ const Header = () => {
               Contact
             </Link>
           </NavItem>
-          <BookButton href="#book">Book Your Seat</BookButton>
+          <BookButton onClick={handleBookSeat}>Book Your Seat</BookButton>
+          
+          {currentUser ? (
+            <UserContainer>
+              <UserButton onClick={toggleUserDropdown}>
+                <UserIcon />
+                <UserName>{currentUser.fullName}</UserName>
+              </UserButton>
+              
+              <UserDropdown isOpen={userDropdownOpen}>
+                <DropdownItem onClick={handleLogout}>
+                  <FaSignOutAlt />
+                  <span>Sign Out</span>
+                </DropdownItem>
+              </UserDropdown>
+            </UserContainer>
+          ) : (
+            <NavItem>
+              <RouterLink 
+                to="/login" 
+                style={{ textDecoration: 'none', color: 'inherit' }}
+                onClick={() => setIsOpen(false)}
+              >
+                Sign In
+              </RouterLink>
+            </NavItem>
+          )}
         </NavLinks>
       </NavContainer>
     </HeaderContainer>
