@@ -7,27 +7,71 @@ export const BookingContext = createContext();
 const sampleSeats = {
   "hot-desk": [
     { id: "A1", name: "A1", available: true, type: "hot-desk" },
-    { id: "A2", name: "A2", available: true, type: "hot-desk" },
-    { id: "A3", name: "A3", available: false, type: "hot-desk" },
+    { id: "A2", name: "A2", available: false, type: "hot-desk" },
+    { id: "A3", name: "A3", available: true, type: "hot-desk" },
     { id: "A4", name: "A4", available: true, type: "hot-desk" },
-    { id: "B1", name: "B1", available: true, type: "hot-desk" },
-    { id: "B2", name: "B2", available: false, type: "hot-desk" },
-    { id: "B3", name: "B3", available: true, type: "hot-desk" },
+    { id: "A5", name: "A5", available: true, type: "hot-desk" },
+    { id: "A6", name: "A6", available: false, type: "hot-desk" },
+    { id: "A7", name: "A7", available: true, type: "hot-desk" },
+    { id: "A8", name: "A8", available: true, type: "hot-desk" },
+    { id: "B1", name: "B1", available: false, type: "hot-desk" },
+    { id: "B2", name: "B2", available: true, type: "hot-desk" },
+    { id: "B3", name: "B3", available: false, type: "hot-desk" },
     { id: "B4", name: "B4", available: true, type: "hot-desk" },
+    { id: "B5", name: "B5", available: true, type: "hot-desk" },
+    { id: "B6", name: "B6", available: false, type: "hot-desk" },
+    { id: "B7", name: "B7", available: true, type: "hot-desk" },
+    { id: "B8", name: "B8", available: false, type: "hot-desk" },
     { id: "C1", name: "C1", available: true, type: "hot-desk" },
     { id: "C2", name: "C2", available: true, type: "hot-desk" },
-    { id: "C3", name: "C3", available: true, type: "hot-desk" },
-    { id: "C4", name: "C4", available: false, type: "hot-desk" }
+    { id: "C3", name: "C3", available: false, type: "hot-desk" },
+    { id: "C4", name: "C4", available: true, type: "hot-desk" },
+    { id: "C5", name: "C5", available: false, type: "hot-desk" },
+    { id: "C6", name: "C6", available: true, type: "hot-desk" },
+    { id: "C7", name: "C7", available: true, type: "hot-desk" },
+    { id: "C8", name: "C8", available: false, type: "hot-desk" },
+    { id: "D1", name: "D1", available: true, type: "hot-desk" },
+    { id: "D2", name: "D2", available: false, type: "hot-desk" },
+    { id: "D3", name: "D3", available: true, type: "hot-desk" },
+    { id: "D4", name: "D4", available: false, type: "hot-desk" },
+    { id: "D5", name: "D5", available: true, type: "hot-desk" },
+    { id: "D6", name: "D6", available: true, type: "hot-desk" },
+    { id: "D7", name: "D7", available: false, type: "hot-desk" },
+    { id: "D8", name: "D8", available: true, type: "hot-desk" }
   ],
   "fixed-desk": [
-    { id: "D1", name: "D1", available: true, type: "fixed-desk" },
-    { id: "D2", name: "D2", available: true, type: "fixed-desk" },
-    { id: "D3", name: "D3", available: false, type: "fixed-desk" },
-    { id: "D4", name: "D4", available: true, type: "fixed-desk" },
-    { id: "E1", name: "E1", available: true, type: "fixed-desk" },
-    { id: "E2", name: "E2", available: false, type: "fixed-desk" },
-    { id: "E3", name: "E3", available: true, type: "fixed-desk" },
-    { id: "E4", name: "E4", available: true, type: "fixed-desk" }
+    { id: "A1-F", name: "A1", available: false, type: "fixed-desk" },
+    { id: "A2-F", name: "A2", available: true, type: "fixed-desk" },
+    { id: "A3-F", name: "A3", available: true, type: "fixed-desk" },
+    { id: "A4-F", name: "A4", available: false, type: "fixed-desk" },
+    { id: "A5-F", name: "A5", available: true, type: "fixed-desk" },
+    { id: "A6-F", name: "A6", available: true, type: "fixed-desk" },
+    { id: "A7-F", name: "A7", available: false, type: "fixed-desk" },
+    { id: "A8-F", name: "A8", available: true, type: "fixed-desk" },
+    { id: "B1-F", name: "B1", available: true, type: "fixed-desk" },
+    { id: "B2-F", name: "B2", available: true, type: "fixed-desk" },
+    { id: "B3-F", name: "B3", available: false, type: "fixed-desk" },
+    { id: "B4-F", name: "B4", available: true, type: "fixed-desk" },
+    { id: "B5-F", name: "B5", available: false, type: "fixed-desk" },
+    { id: "B6-F", name: "B6", available: true, type: "fixed-desk" },
+    { id: "B7-F", name: "B7", available: true, type: "fixed-desk" },
+    { id: "B8-F", name: "B8", available: false, type: "fixed-desk" },
+    { id: "C1-F", name: "C1", available: true, type: "fixed-desk" },
+    { id: "C2-F", name: "C2", available: false, type: "fixed-desk" },
+    { id: "C3-F", name: "C3", available: true, type: "fixed-desk" },
+    { id: "C4-F", name: "C4", available: true, type: "fixed-desk" },
+    { id: "C5-F", name: "C5", available: false, type: "fixed-desk" },
+    { id: "C6-F", name: "C6", available: true, type: "fixed-desk" },
+    { id: "C7-F", name: "C7", available: false, type: "fixed-desk" },
+    { id: "C8-F", name: "C8", available: true, type: "fixed-desk" },
+    { id: "D1-F", name: "D1", available: false, type: "fixed-desk" },
+    { id: "D2-F", name: "D2", available: true, type: "fixed-desk" },
+    { id: "D3-F", name: "D3", available: true, type: "fixed-desk" },
+    { id: "D4-F", name: "D4", available: false, type: "fixed-desk" },
+    { id: "D5-F", name: "D5", available: true, type: "fixed-desk" },
+    { id: "D6-F", name: "D6", available: false, type: "fixed-desk" },
+    { id: "D7-F", name: "D7", available: true, type: "fixed-desk" },
+    { id: "D8-F", name: "D8", available: true, type: "fixed-desk" }
   ]
 };
 
@@ -42,6 +86,9 @@ export const BookingProvider = ({ children }) => {
     
     // Bước 3: Chọn ngày và giờ
     date: null,
+    endDate: null, // Thêm ngày kết thúc dựa vào package duration
+    time: null, // Thêm giờ bắt đầu riêng
+    endTime: null, // Thêm giờ kết thúc riêng
     
     // Bước 4: Chọn vị trí chỗ ngồi
     selectedSeat: null,
@@ -123,10 +170,13 @@ export const BookingProvider = ({ children }) => {
   };
 
   // Phương thức cập nhật ngày (Bước 3)
-  const selectDate = (date) => {
+  const selectDate = (date, endDate, time, endTime) => {
     setBookingState({
       ...bookingState,
       date,
+      endDate,
+      time,
+      endTime,
       // Reset các bước tiếp theo nếu thay đổi ngày
       selectedSeat: null,
       paymentMethod: null,

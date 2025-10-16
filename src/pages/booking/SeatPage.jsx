@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useBooking } from '../../contexts/BookingContext';
 import BookingLayout from './BookingLayout';
+import { FaExpandAlt, FaCompressAlt, FaTh, FaMapMarkedAlt } from 'react-icons/fa';
+import ModernOfficeMap from '../../components/ModernOfficeMap';
 
 const SeatTitle = styled.div`
   display: flex;
@@ -32,13 +34,57 @@ const SeatTitleText = styled.h3`
   }
 `;
 
-const FloorIndicator = styled.div`
-  font-size: 1.2rem;
+const FloorTag = styled.div`
+  padding: 0.4rem 1rem;
+  border-radius: 4px;
+  background-color: #45bf55;
+  color: #fff;
+  font-size: 0.9rem;
   font-weight: 500;
-  color: #45bf55;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
   
   @media (max-width: 480px) {
-    font-size: 1.1rem;
+    padding: 0.3rem 0.8rem;
+    font-size: 0.8rem;
+  }
+`;
+
+const ViewControls = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+`;
+
+const ControlButtons = styled.div`
+  display: flex;
+  gap: 0.5rem;
+`;
+
+const ControlButton = styled.button`
+  padding: 0.4rem 1rem;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  background-color: ${props => props.active ? '#333' : '#fff'};
+  color: ${props => props.active ? '#fff' : '#333'};
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  
+  &:hover {
+    background-color: ${props => props.active ? '#333' : '#f5f5f5'};
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 0.3rem 0.8rem;
+    font-size: 0.8rem;
   }
 `;
 
@@ -88,14 +134,14 @@ const SeatmapContainer = styled.div`
 
 const SeatmapImage = styled.div`
   position: relative;
-  max-width: 100%;
-  margin-bottom: 2rem;
-
-  img {
-    width: 100%;
-    height: auto;
-    border-radius: 8px;
-  }
+  width: 100%;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  transform: ${props => `scale(${props.zoomLevel/100})`};
+  transform-origin: top center;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
 `;
 
 const SeatLegend = styled.div`
@@ -168,15 +214,18 @@ const SeatItem = styled.div`
   align-items: center;
   justify-content: center;
   color: ${props => props.selected || props.reserved || props.occupied ? 'white' : '#333'};
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   font-weight: bold;
-  opacity: ${props => props.available ? 1 : 0.6};
+  opacity: ${props => props.available ? 1 : 0.8};
   transition: all 0.2s;
+  border: 2px solid transparent;
+  box-shadow: ${props => props.selected ? '0 3px 6px rgba(0,0,0,0.2)' : 'none'};
   
   &:hover {
     ${props => props.available && !props.selected && `
-      transform: translateY(-2px);
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      transform: translateY(-3px);
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+      border-color: #45bf55;
     `}
   }
 `;
@@ -311,6 +360,8 @@ const NextButton = styled.button`
 const SeatPage = () => {
   const { bookingState, selectSeat } = useBooking();
   const navigate = useNavigate();
+  const [viewMode, setViewMode] = useState('map'); // 'map' hoặc 'grid'
+  const [zoomLevel, setZoomLevel] = useState(100); // Mức độ zoom (%)
   
   // Redirect if previous steps are not completed
   useEffect(() => {
@@ -319,10 +370,19 @@ const SeatPage = () => {
     }
   }, [bookingState.serviceType, bookingState.packageDuration, bookingState.date, navigate]);
   
-  // Get seats based on selected service type
-  const seatsForPackage = bookingState.seats[bookingState.serviceType] || [];
+  // Lấy danh sách chỗ ngồi phù hợp với loại dịch vụ
+  const getPackageTypeFromBookingState = () => {
+    if (bookingState.serviceType === 'hot-desk') {
+      return 'hot-desk';
+    } else {
+      return 'fixed-desk';
+    }
+  };
   
-  // Handle seat selection
+  const packageType = getPackageTypeFromBookingState();
+  const seatsForPackage = bookingState.seats[packageType] || [];
+  
+  // Xử lý khi chọn chỗ ngồi
   const handleSeatSelect = (seat) => {
     if (seat.available) {
       selectSeat(seat);
@@ -342,7 +402,7 @@ const SeatPage = () => {
   const formatDate = (dateString) => {
     if (!dateString) return 'Not selected';
     const date = new Date(dateString);
-    const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return date.toLocaleDateString('en-US', options);
   };
   
@@ -368,56 +428,122 @@ const SeatPage = () => {
         </InfoRow>
         
         <InfoRow>
-          <InfoLabel>Date & Time:</InfoLabel>
-          <InfoValue>{formatDate(bookingState.date)}</InfoValue>
+          <InfoLabel>Start Date:</InfoLabel>
+          <InfoValue>{bookingState.date ? formatDate(bookingState.date) : 'Not selected'}</InfoValue>
+        </InfoRow>
+        
+        <InfoRow>
+          <InfoLabel>Start Time:</InfoLabel>
+          <InfoValue>{bookingState.time || 'Not selected'}</InfoValue>
+        </InfoRow>
+        
+        <InfoRow>
+          <InfoLabel>End Date:</InfoLabel>
+          <InfoValue>{bookingState.endDate ? formatDate(bookingState.endDate) : 'Not selected'}</InfoValue>
+        </InfoRow>
+        
+        <InfoRow>
+          <InfoLabel>End Time:</InfoLabel>
+          <InfoValue>{bookingState.endTime || 'Not selected'}</InfoValue>
         </InfoRow>
       </SeatSelectionInfo>
       
       <SeatmapContainer>
         <SeatTitle>
           <SeatTitleText>Select a seat from the available options</SeatTitleText>
-          <FloorIndicator>Floor 1</FloorIndicator>
+          <FloorTag>Floor 1</FloorTag>
         </SeatTitle>
         
-        <SeatmapImage>
-          <img 
-            src="https://res.cloudinary.com/dvwp5td6y/image/upload/v1760474263/office-floor-plan_tqrrnv.png" 
-            alt="Seatmap" 
-          />
-        </SeatmapImage>
-        
-        <SeatLegend>
-          <LegendItem>
-            <LegendColor color="#e74c3c" />
-            <span>Occupied</span>
-          </LegendItem>
-          <LegendItem>
-            <LegendColor color="#3498db" />
-            <span>Reserved</span>
-          </LegendItem>
-          <LegendItem>
-            <LegendColor color="#f5f5f5" />
-            <span>Available</span>
-          </LegendItem>
-          <LegendItem>
-            <LegendColor color="#45bf55" />
-            <span>Selected</span>
-          </LegendItem>
-        </SeatLegend>
-        
-        <SeatsGrid>
-          {seatsForPackage.map((seat) => (
-            <SeatItem
-              key={seat.id}
-              available={seat.available}
-              occupied={!seat.available}
-              selected={bookingState.selectedSeat && bookingState.selectedSeat.id === seat.id}
-              onClick={() => handleSeatSelect(seat)}
+        <ViewControls>
+          <ControlButtons>
+            <ControlButton 
+              active={viewMode === 'map'} 
+              onClick={() => setViewMode('map')}
             >
-              {seat.name}
-            </SeatItem>
-          ))}
-        </SeatsGrid>
+              <FaMapMarkedAlt style={{ marginRight: '5px' }} />
+              Map View
+            </ControlButton>
+            <ControlButton 
+              active={viewMode === 'grid'} 
+              onClick={() => setViewMode('grid')}
+            >
+              <FaTh style={{ marginRight: '5px' }} />
+              Grid View
+            </ControlButton>
+          </ControlButtons>
+          
+          {viewMode === 'map' && (
+            <ControlButtons>
+              <ControlButton 
+                onClick={() => setZoomLevel(Math.max(80, zoomLevel - 10))}
+                disabled={zoomLevel <= 80}
+              >
+                <FaCompressAlt style={{ marginRight: '5px' }} />
+                Zoom Out
+              </ControlButton>
+              <ControlButton 
+                onClick={() => setZoomLevel(100)}
+              >
+                Reset
+              </ControlButton>
+              <ControlButton 
+                onClick={() => setZoomLevel(Math.min(130, zoomLevel + 10))}
+                disabled={zoomLevel >= 130}
+              >
+                <FaExpandAlt style={{ marginRight: '5px' }} />
+                Zoom In
+              </ControlButton>
+            </ControlButtons>
+          )}
+        </ViewControls>
+        
+        {viewMode === 'map' && (
+          <SeatmapImage zoomLevel={zoomLevel}>
+            <ModernOfficeMap 
+              seats={seatsForPackage}
+              selectedSeatId={bookingState.selectedSeat?.id}
+              onSelectSeat={handleSeatSelect}
+            />
+          </SeatmapImage>
+        )}
+        
+        {viewMode === 'grid' && (
+          <>
+            <SeatLegend>
+              <LegendItem>
+                <LegendColor color="#e74c3c" />
+                <span>Occupied</span>
+              </LegendItem>
+              <LegendItem>
+                <LegendColor color="#3498db" />
+                <span>Reserved</span>
+              </LegendItem>
+              <LegendItem>
+                <LegendColor color="#f5f5f5" />
+                <span>Available</span>
+              </LegendItem>
+              <LegendItem>
+                <LegendColor color="#45bf55" />
+                <span>Selected</span>
+              </LegendItem>
+            </SeatLegend>
+            
+            <SeatsGrid>
+              {seatsForPackage.map((seat) => (
+                <SeatItem
+                  key={seat.id}
+                  available={seat.available}
+                  occupied={!seat.available}
+                  reserved={!seat.available && seat.id.includes('B')}
+                  selected={bookingState.selectedSeat && bookingState.selectedSeat.id === seat.id}
+                  onClick={() => handleSeatSelect(seat)}
+                >
+                  {seat.name}
+                </SeatItem>
+              ))}
+            </SeatsGrid>
+          </>
+        )}
       </SeatmapContainer>
       
       {bookingState.selectedSeat && (
@@ -425,6 +551,14 @@ const SeatPage = () => {
           <SummaryInfo>
             <SummaryLabel>SEAT SELECTED</SummaryLabel>
             <SummaryValue>{bookingState.selectedSeat.name}</SummaryValue>
+          </SummaryInfo>
+          <SummaryInfo>
+            <SummaryLabel>LOCATION</SummaryLabel>
+            <SummaryValue>Floor 1, {
+              bookingState.selectedSeat.name.startsWith('A') || bookingState.selectedSeat.name.startsWith('B') 
+                ? 'North Wing' 
+                : 'South Wing'
+            }</SummaryValue>
           </SummaryInfo>
         </BookingSummary>
       )}

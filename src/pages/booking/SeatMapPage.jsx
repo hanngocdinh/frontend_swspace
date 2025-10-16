@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../components/layout/Header';
 import Footer from '../../components/layout/Footer';
 import { useBooking } from '../../contexts/BookingContext';
+import SeatMap from '../../components/SeatMap';
+import SeatMapLegacy from '../../components/SeatMapLegacy';
 
 const PageContainer = styled.div`
   display: flex;
@@ -126,57 +128,27 @@ const MapTitle = styled.h3`
   text-align: center;
 `;
 
-const SeatsGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+const FloorButtonsContainer = styled.div`
+  display: flex;
+  justify-content: center;
   gap: 1rem;
-  margin: 0 auto;
-  max-width: 600px;
+  margin-bottom: 2rem;
 `;
 
-const Seat = styled.div`
-  width: 80px;
-  height: 80px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: ${props => props.available ? 'pointer' : 'not-allowed'};
-  background-color: ${props => 
-    props.selected ? '#45bf55' :
-    props.available ? '#f5f5f5' : '#e0e0e0'
-  };
-  color: ${props => props.selected ? 'white' : '#333'};
+const FloorButton = styled.button`
+  padding: 0.5rem 1.5rem;
+  background-color: ${props => props.active ? '#45bf55' : '#f5f5f5'};
+  color: ${props => props.active ? 'white' : '#333'};
+  border: none;
+  border-radius: 4px;
   font-weight: 500;
+  cursor: pointer;
   transition: all 0.3s;
-  border: 2px solid transparent;
   
   &:hover {
-    border-color: ${props => props.available ? '#45bf55' : 'transparent'};
-    transform: ${props => props.available ? 'translateY(-2px)' : 'none'};
+    background-color: ${props => props.active ? '#38a046' : '#e0e0e0'};
+    transform: translateY(-2px);
   }
-`;
-
-const Legend = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  margin-top: 2rem;
-`;
-
-const LegendItem = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.9rem;
-  color: #555;
-`;
-
-const LegendColor = styled.div`
-  width: 20px;
-  height: 20px;
-  border-radius: 4px;
-  background-color: ${props => props.color};
 `;
 
 const ActionContainer = styled.div`
@@ -227,14 +199,34 @@ const NextButton = styled.button`
 const SeatMapPage = () => {
   const { bookingState, selectSeat } = useBooking();
   const navigate = useNavigate();
+  const [currentFloor, setCurrentFloor] = useState(1);
   
   // Redirect if previous steps are not completed
-  if (!bookingState.serviceType || !bookingState.packageType || !bookingState.date) {
+  if (!bookingState.serviceType || !bookingState.packageDuration || !bookingState.date) {
     navigate('/booking/service');
     return null;
   }
   
-  const seatsForPackage = bookingState.seats[bookingState.packageType] || [];
+  // Map seat data based on the package type
+  const getPackageTypeFromBookingState = () => {
+    // Map packageDuration to packageType for backward compatibility
+    if (bookingState.serviceType === 'hot-desk') {
+      return 'hot-desk';
+    } else {
+      return 'fixed-desk';
+    }
+  };
+  
+  const packageType = getPackageTypeFromBookingState();
+  const seatsForPackage = bookingState.seats[packageType] || [];
+  
+  // Divide seats by floor
+  const floorSeats = {
+    1: seatsForPackage.filter(seat => seat.name.startsWith('A') || seat.name.startsWith('B')),
+    2: seatsForPackage.filter(seat => seat.name.startsWith('C') || seat.name.startsWith('D'))
+  };
+  
+  const currentFloorSeats = floorSeats[currentFloor] || [];
   
   const handleSeatSelect = (seat) => {
     if (seat.available) {
@@ -250,11 +242,21 @@ const SeatMapPage = () => {
     navigate('/booking/date');
   };
   
+  const handleFloorChange = (floor) => {
+    setCurrentFloor(floor);
+  };
+  
   // Format date for display
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return date.toLocaleDateString('en-US', options);
+  };
+  
+  // Format time for display
+  const formatTime = (timeString) => {
+    if (!timeString) return '';
+    return timeString;
   };
 
   return (
@@ -305,41 +307,50 @@ const SeatMapPage = () => {
               </InfoRow>
               
               <InfoRow>
-                <InfoLabel>Date & Time:</InfoLabel>
+                <InfoLabel>Start Date:</InfoLabel>
                 <InfoValue>{formatDate(bookingState.date)}</InfoValue>
+              </InfoRow>
+              
+              <InfoRow>
+                <InfoLabel>Start Time:</InfoLabel>
+                <InfoValue>{bookingState.time || 'N/A'}</InfoValue>
+              </InfoRow>
+              
+              <InfoRow>
+                <InfoLabel>End Date:</InfoLabel>
+                <InfoValue>{bookingState.endDate ? formatDate(bookingState.endDate) : 'N/A'}</InfoValue>
+              </InfoRow>
+              
+              <InfoRow>
+                <InfoLabel>End Time:</InfoLabel>
+                <InfoValue>{bookingState.endTime || 'N/A'}</InfoValue>
               </InfoRow>
             </SeatSelectionInfo>
             
             <MapContainer>
               <MapTitle>Select a seat from the available options below</MapTitle>
               
-              <SeatsGrid>
-                {seatsForPackage.map((seat) => (
-                  <Seat
-                    key={seat.id}
-                    available={seat.available}
-                    selected={bookingState.selectedSeat && bookingState.selectedSeat.id === seat.id}
-                    onClick={() => handleSeatSelect(seat)}
-                  >
-                    {seat.name}
-                  </Seat>
-                ))}
-              </SeatsGrid>
+              <FloorButtonsContainer>
+                <FloorButton 
+                  active={currentFloor === 1} 
+                  onClick={() => handleFloorChange(1)}
+                >
+                  Floor 1
+                </FloorButton>
+                <FloorButton 
+                  active={currentFloor === 2} 
+                  onClick={() => handleFloorChange(2)}
+                >
+                  Floor 2
+                </FloorButton>
+              </FloorButtonsContainer>
               
-              <Legend>
-                <LegendItem>
-                  <LegendColor color="#f5f5f5" />
-                  <span>Available</span>
-                </LegendItem>
-                <LegendItem>
-                  <LegendColor color="#e0e0e0" />
-                  <span>Unavailable</span>
-                </LegendItem>
-                <LegendItem>
-                  <LegendColor color="#45bf55" />
-                  <span>Selected</span>
-                </LegendItem>
-              </Legend>
+              {/* Sử dụng SeatMapLegacy để hiển thị giống với thiết kế gốc */}
+              <SeatMapLegacy
+                seats={currentFloorSeats}
+                onSelectSeat={handleSeatSelect}
+                selectedSeatId={bookingState.selectedSeat?.id}
+              />
             </MapContainer>
             
             <ActionContainer>
