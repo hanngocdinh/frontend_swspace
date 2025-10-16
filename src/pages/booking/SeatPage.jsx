@@ -3,8 +3,12 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useBooking } from '../../contexts/BookingContext';
 import BookingLayout from './BookingLayout';
-import { FaExpandAlt, FaCompressAlt, FaTh, FaMapMarkedAlt } from 'react-icons/fa';
+import { FaExpandAlt, FaCompressAlt, FaTh, FaMapMarkedAlt, FaCube } from 'react-icons/fa';
 import ModernOfficeMap from '../../components/ModernOfficeMap';
+import ThreeDViewer from '../../components/ThreeDViewer';
+import FloatingTourButton from '../../components/FloatingTourButton';
+import SketchfabEmbed from '../../components/SketchfabEmbed';
+import TourSection from '../../components/TourSection';
 
 const SeatTitle = styled.div`
   display: flex;
@@ -362,6 +366,7 @@ const SeatPage = () => {
   const navigate = useNavigate();
   const [viewMode, setViewMode] = useState('map'); // 'map' hoặc 'grid'
   const [zoomLevel, setZoomLevel] = useState(100); // Mức độ zoom (%)
+  const [show3DView, setShow3DView] = useState(false); // State để hiển thị modal xem 3D
   
   // Redirect if previous steps are not completed
   useEffect(() => {
@@ -470,6 +475,13 @@ const SeatPage = () => {
               <FaTh style={{ marginRight: '5px' }} />
               Grid View
             </ControlButton>
+            <ControlButton 
+              onClick={() => setShow3DView(true)}
+              style={{ background: '#4a90e2', color: 'white' }}
+            >
+              <FaCube style={{ marginRight: '5px' }} />
+              3D Tour
+            </ControlButton>
           </ControlButtons>
           
           {viewMode === 'map' && (
@@ -563,6 +575,11 @@ const SeatPage = () => {
         </BookingSummary>
       )}
       
+      {/* Phần hiển thị tour 3D có thể mở rộng */}
+      <TourSection>
+        <SketchfabEmbed />
+      </TourSection>
+      
       <ActionContainer>
         <BackButton onClick={handleBackStep}>
           Back
@@ -574,6 +591,12 @@ const SeatPage = () => {
           Next Step
         </NextButton>
       </ActionContainer>
+      
+      {/* Modal hiển thị không gian 3D */}
+      <ThreeDViewer isOpen={show3DView} onClose={() => setShow3DView(false)} />
+      
+      {/* Nút nổi để truy cập vào tour 3D từ mọi nơi trên trang */}
+      <FloatingTourButton onClick={() => setShow3DView(true)} />
     </BookingLayout>
   );
 };
