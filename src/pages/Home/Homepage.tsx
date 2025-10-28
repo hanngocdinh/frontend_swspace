@@ -1,4 +1,4 @@
-import svgPaths from './svg-3qvm32cgix'
+import svgPaths from '@/imports/svg-3qvm32cgix'
 import imgChatGptImageOct62025112432Am2 from "figma:asset/f2273ba2e99315833eb09f6a011a33bd930b6327.png";
 import imgEllipse6 from "figma:asset/00b1efc376a0b14ff6d66ae8832fd4c18ce8f442.png";
 /**

@@ -6,14 +6,20 @@
     "module": "ESNext",
     "skipLibCheck": true,
     "moduleResolution": "bundler",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
     "noImplicitAny": false,
     "allowJs": false,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "jsx": "react-jsx",
-    "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true
+    "noEmit": true,
+   "typeRoots": [
+        "./src/types", 
+        "./node_modules/@types" 
+   ]
   },
-  "include": ["src"]
+  "include": ["./src"]
 }
