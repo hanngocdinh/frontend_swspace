@@ -31,9 +31,9 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../../components/u
 import { toast } from "sonner";
 
 // ==================== ROOM TYPES ====================
-interface Room {
+interface Space {
   id: string;
-  type: "Meeting Room" | "Private Office";
+  type: "Event Hall" | "Conference Area" | "Open Networking Zone";
   zone: string;
   capacity: number;
   status: "Available" | "Occupied" | "Reserved" | "Maintenance";
@@ -48,7 +48,7 @@ interface Room {
     startDate: string;
     endDate: string;
     paymentStatus: "Paid" | "Pending" | "Overdue";
-    meetingTitle?: string;
+    eventTitle?: string;
   };
 }
 
@@ -59,169 +59,186 @@ interface AIStatus {
   lastUpdate: string;
 }
 
-// ==================== FLOOR 2 DATA ====================
-const floor2Rooms: Room[] = [
-  // Meeting Rooms
+// ==================== FLOOR 3 DATA ====================
+const floor3Spaces: Space[] = [
+  // Event Halls
   { 
-    id: "MR-201", 
-    type: "Meeting Room", 
-    zone: "East Wing", 
-    capacity: 8,
+    id: "EH-301", 
+    type: "Event Hall", 
+    zone: "Main Hall", 
+    capacity: 200,
     status: "Occupied",
-    user: { name: "Nguyễn Văn A", email: "nguyenvana@email.com", phone: "0901234567", company: "ABC Corp" },
+    user: { name: "Nguyễn Thị A", email: "nguyenthia@email.com", phone: "0901234567", company: "Tech Conference Ltd" },
     booking: { 
-      package: "Hourly Booking", 
-      startDate: "2025-10-21 09:00", 
-      endDate: "2025-10-21 11:00",
-      paymentStatus: "Paid",
-      meetingTitle: "Quarterly Review Meeting"
-    }
-  },
-  { id: "MR-202", type: "Meeting Room", zone: "East Wing", capacity: 12, status: "Available" },
-  { 
-    id: "MR-203", 
-    type: "Meeting Room", 
-    zone: "East Wing", 
-    capacity: 6,
-    status: "Reserved",
-    user: { name: "Trần Thị B", email: "tranthib@email.com", phone: "0912345678", company: "XYZ Ltd" },
-    booking: { 
-      package: "Half Day", 
-      startDate: "2025-10-21 14:00", 
+      package: "Full Day Event", 
+      startDate: "2025-10-21 08:00", 
       endDate: "2025-10-21 18:00",
-      paymentStatus: "Pending",
-      meetingTitle: "Client Presentation"
+      paymentStatus: "Paid",
+      eventTitle: "Annual Tech Summit 2025"
     }
   },
-  { id: "MR-204", type: "Meeting Room", zone: "West Wing", capacity: 10, status: "Available" },
-  { id: "MR-205", type: "Meeting Room", zone: "West Wing", capacity: 16, status: "Maintenance" },
-  
-  // Private Offices
   { 
-    id: "PO-301", 
-    type: "Private Office", 
-    zone: "North Wing", 
-    capacity: 2,
-    status: "Occupied",
-    user: { name: "Lê Văn C", email: "levanc@email.com", phone: "0923456789", company: "Tech Solutions" },
+    id: "EH-302", 
+    type: "Event Hall", 
+    zone: "East Wing", 
+    capacity: 150,
+    status: "Reserved",
+    user: { name: "Trần Văn B", email: "tranvanb@email.com", phone: "0912345678", company: "Business Solutions" },
     booking: { 
-      package: "Monthly Rental", 
-      startDate: "2025-10-01", 
-      endDate: "2025-11-01",
+      package: "Half Day Event", 
+      startDate: "2025-10-22 09:00", 
+      endDate: "2025-10-22 13:00",
+      paymentStatus: "Pending",
+      eventTitle: "Product Launch Event"
+    }
+  },
+  { id: "EH-303", type: "Event Hall", zone: "West Wing", capacity: 100, status: "Available" },
+  { id: "EH-304", type: "Event Hall", zone: "North Wing", capacity: 80, status: "Maintenance" },
+  
+  // Conference Areas
+  { 
+    id: "CA-401", 
+    type: "Conference Area", 
+    zone: "Central Area", 
+    capacity: 50,
+    status: "Occupied",
+    user: { name: "Lê Thị C", email: "lethic@email.com", phone: "0923456789", company: "Startup Hub" },
+    booking: { 
+      package: "Weekly Conference", 
+      startDate: "2025-10-20", 
+      endDate: "2025-10-27",
       paymentStatus: "Paid"
     }
   },
-  { id: "PO-302", type: "Private Office", zone: "North Wing", capacity: 4, status: "Available" },
+  { id: "CA-402", type: "Conference Area", zone: "Central Area", capacity: 40, status: "Available" },
   { 
-    id: "PO-303", 
-    type: "Private Office", 
+    id: "CA-403", 
+    type: "Conference Area", 
     zone: "South Wing", 
-    capacity: 6,
-    status: "Occupied",
-    user: { name: "Phạm Thị D", email: "phamthid@email.com", phone: "0934567890", company: "Startup Inc" },
+    capacity: 60,
+    status: "Reserved",
+    user: { name: "Phạm Văn D", email: "phamvand@email.com", phone: "0934567890", company: "Innovation Lab" },
     booking: { 
-      package: "Quarterly Rental", 
-      startDate: "2025-09-01", 
-      endDate: "2025-12-01",
-      paymentStatus: "Overdue"
-    }
-  },
-  { id: "PO-304", type: "Private Office", zone: "South Wing", capacity: 3, status: "Available" },
-  { id: "PO-305", type: "Private Office", zone: "South Wing", capacity: 2, status: "Reserved",
-    user: { name: "Hoàng Văn E", email: "hoangvane@email.com", phone: "0945678901", company: "Design Studio" },
-    booking: { 
-      package: "Daily Pass", 
+      package: "Daily Conference", 
       startDate: "2025-10-21", 
       endDate: "2025-10-21",
       paymentStatus: "Paid"
     }
   },
-  { id: "PO-306", type: "Private Office", zone: "North Wing", capacity: 4, status: "Available" },
-  { id: "PO-307", type: "Private Office", zone: "Central Area", capacity: 5, status: "Occupied",
-    user: { name: "Vũ Thị F", email: "vuthif@email.com", phone: "0956789012", company: "Legal Firm" },
+  { id: "CA-404", type: "Conference Area", zone: "South Wing", capacity: 45, status: "Available" },
+  
+  // Open Networking Zones
+  { 
+    id: "ONZ-501", 
+    type: "Open Networking Zone", 
+    zone: "Lounge Area", 
+    capacity: 30,
+    status: "Occupied",
+    user: { name: "Hoàng Thị E", email: "hoangthie@email.com", phone: "0945678901", company: "Networking Club" },
     booking: { 
-      package: "Monthly Premium", 
-      startDate: "2025-10-10", 
-      endDate: "2025-11-10",
+      package: "Monthly Access", 
+      startDate: "2025-10-01", 
+      endDate: "2025-11-01",
       paymentStatus: "Paid"
     }
   },
-  { id: "PO-308", type: "Private Office", zone: "Central Area", capacity: 2, status: "Available" },
+  { id: "ONZ-502", type: "Open Networking Zone", zone: "Lounge Area", capacity: 25, status: "Available" },
+  { id: "ONZ-503", type: "Open Networking Zone", zone: "Café Area", capacity: 35, status: "Available" },
+  { id: "ONZ-504", type: "Open Networking Zone", zone: "Café Area", capacity: 30, status: "Occupied",
+    user: { name: "Vũ Văn F", email: "vuvanf@email.com", phone: "0956789012", company: "Entrepreneur Circle" },
+    booking: { 
+      package: "Weekly Access", 
+      startDate: "2025-10-15", 
+      endDate: "2025-10-22",
+      paymentStatus: "Paid"
+    }
+  },
+  { id: "ONZ-505", type: "Open Networking Zone", zone: "Terrace Area", capacity: 40, status: "Available" },
+  { id: "ONZ-506", type: "Open Networking Zone", zone: "Terrace Area", capacity: 35, status: "Reserved",
+    user: { name: "Đỗ Thị G", email: "dothig@email.com", phone: "0967890123", company: "Business Network" },
+    booking: { 
+      package: "Daily Access", 
+      startDate: "2025-10-21", 
+      endDate: "2025-10-21",
+      paymentStatus: "Pending"
+    }
+  },
 ];
 
 const aiCameras: AIStatus[] = [
   {
-    cameraName: "East Wing Camera",
+    cameraName: "Main Hall Camera",
     status: "online",
-    detectedPeople: 14,
+    detectedPeople: 182,
     lastUpdate: "1 min ago"
-  },
-  {
-    cameraName: "West Wing Camera",
-    status: "online",
-    detectedPeople: 8,
-    lastUpdate: "2 mins ago"
-  },
-  {
-    cameraName: "North Wing Camera",
-    status: "online",
-    detectedPeople: 6,
-    lastUpdate: "1 min ago"
-  },
-  {
-    cameraName: "South Wing Camera",
-    status: "offline",
-    detectedPeople: 0,
-    lastUpdate: "15 mins ago"
   },
   {
     cameraName: "Central Area Camera",
     status: "online",
-    detectedPeople: 5,
+    detectedPeople: 48,
     lastUpdate: "2 mins ago"
+  },
+  {
+    cameraName: "Lounge Area Camera",
+    status: "online",
+    detectedPeople: 28,
+    lastUpdate: "1 min ago"
+  },
+  {
+    cameraName: "Café Area Camera",
+    status: "online",
+    detectedPeople: 32,
+    lastUpdate: "1 min ago"
+  },
+  {
+    cameraName: "Terrace Area Camera",
+    status: "offline",
+    detectedPeople: 0,
+    lastUpdate: "20 mins ago"
   }
 ];
 
-export default function Floor2() {
-  const [searchRoom, setSearchRoom] = useState("");
-  const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
+export default function Floor3() {
+  const [searchSpace, setSearchSpace] = useState("");
+  const [selectedSpace, setSelectedSpace] = useState<Space | null>(null);
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [typeFilter, setTypeFilter] = useState<string>("all");
   const [zoneFilter, setZoneFilter] = useState<string>("all");
   const [showFilters, setShowFilters] = useState(false);
 
-  // Room Stats
-  const totalRooms = floor2Rooms.length;
-  const meetingRooms = floor2Rooms.filter(r => r.type === "Meeting Room").length;
-  const privateOffices = floor2Rooms.filter(r => r.type === "Private Office").length;
-  const occupiedRooms = floor2Rooms.filter(r => r.status === "Occupied").length;
-  const reservedRooms = floor2Rooms.filter(r => r.status === "Reserved").length;
-  const availableRooms = floor2Rooms.filter(r => r.status === "Available").length;
-  const maintenanceRooms = floor2Rooms.filter(r => r.status === "Maintenance").length;
+  // Space Stats
+  const totalSpaces = floor3Spaces.length;
+  const eventHalls = floor3Spaces.filter(s => s.type === "Event Hall").length;
+  const conferenceAreas = floor3Spaces.filter(s => s.type === "Conference Area").length;
+  const networkingZones = floor3Spaces.filter(s => s.type === "Open Networking Zone").length;
+  const occupiedSpaces = floor3Spaces.filter(s => s.status === "Occupied").length;
+  const reservedSpaces = floor3Spaces.filter(s => s.status === "Reserved").length;
+  const availableSpaces = floor3Spaces.filter(s => s.status === "Available").length;
+  const maintenanceSpaces = floor3Spaces.filter(s => s.status === "Maintenance").length;
 
-  // Filter Rooms
-  const filteredRooms = floor2Rooms.filter(room => {
-    const matchesSearch = room.id.toLowerCase().includes(searchRoom.toLowerCase()) ||
-                         room.zone.toLowerCase().includes(searchRoom.toLowerCase()) ||
-                         room.type.toLowerCase().includes(searchRoom.toLowerCase());
-    const matchesStatus = statusFilter === "all" || room.status === statusFilter;
-    const matchesType = typeFilter === "all" || room.type === typeFilter;
-    const matchesZone = zoneFilter === "all" || room.zone === zoneFilter;
+  // Filter Spaces
+  const filteredSpaces = floor3Spaces.filter(space => {
+    const matchesSearch = space.id.toLowerCase().includes(searchSpace.toLowerCase()) ||
+                         space.zone.toLowerCase().includes(searchSpace.toLowerCase()) ||
+                         space.type.toLowerCase().includes(searchSpace.toLowerCase());
+    const matchesStatus = statusFilter === "all" || space.status === statusFilter;
+    const matchesType = typeFilter === "all" || space.type === typeFilter;
+    const matchesZone = zoneFilter === "all" || space.zone === zoneFilter;
     return matchesSearch && matchesStatus && matchesType && matchesZone;
   });
 
-  const handleRoomClick = (room: Room) => {
-    setSelectedRoom(room);
+  const handleSpaceClick = (space: Space) => {
+    setSelectedSpace(space);
   };
 
   const handleMarkAsVacant = () => {
-    toast.success(`Room ${selectedRoom?.id} marked as vacant`);
-    setSelectedRoom(null);
+    toast.success(`Space ${selectedSpace?.id} marked as vacant`);
+    setSelectedSpace(null);
   };
 
   const handleCancelBooking = () => {
-    toast.success(`Booking for ${selectedRoom?.id} has been canceled`);
-    setSelectedRoom(null);
+    toast.success(`Booking for ${selectedSpace?.id} has been canceled`);
+    setSelectedSpace(null);
   };
 
   const handleExportReport = () => {
@@ -230,7 +247,7 @@ export default function Floor2() {
 
   return (
     <>
-      {/* Stats Cards - Floor 2 */}
+      {/* Stats Cards - Floor 3 */}
       <div className="grid grid-cols-5 gap-4 mb-6">
         <div className="bg-white rounded-[16px] p-5 shadow-sm border border-gray-100">
           <div className="flex items-center gap-4">
@@ -241,8 +258,8 @@ export default function Floor2() {
               </svg>
             </div>
             <div>
-              <p className="text-[13px] text-gray-600 mb-1">Total Rooms</p>
-              <p className="text-[28px] font-semibold text-[#021526]">{totalRooms}</p>
+              <p className="text-[13px] text-gray-600 mb-1">Total Spaces</p>
+              <p className="text-[28px] font-semibold text-[#021526]">{totalSpaces}</p>
             </div>
           </div>
         </div>
@@ -254,7 +271,7 @@ export default function Floor2() {
             </div>
             <div>
               <p className="text-[13px] text-gray-600 mb-1">Available</p>
-              <p className="text-[28px] font-semibold text-[#021526]">{availableRooms}</p>
+              <p className="text-[28px] font-semibold text-[#021526]">{availableSpaces}</p>
             </div>
           </div>
         </div>
@@ -266,7 +283,7 @@ export default function Floor2() {
             </div>
             <div>
               <p className="text-[13px] text-gray-600 mb-1">Occupied</p>
-              <p className="text-[28px] font-semibold text-[#021526]">{occupiedRooms}</p>
+              <p className="text-[28px] font-semibold text-[#021526]">{occupiedSpaces}</p>
             </div>
           </div>
         </div>
@@ -278,7 +295,7 @@ export default function Floor2() {
             </div>
             <div>
               <p className="text-[13px] text-gray-600 mb-1">Reserved</p>
-              <p className="text-[28px] font-semibold text-[#021526]">{reservedRooms}</p>
+              <p className="text-[28px] font-semibold text-[#021526]">{reservedSpaces}</p>
             </div>
           </div>
         </div>
@@ -290,7 +307,7 @@ export default function Floor2() {
             </div>
             <div>
               <p className="text-[13px] text-gray-600 mb-1">Maintenance</p>
-              <p className="text-[28px] font-semibold text-[#021526]">{maintenanceRooms}</p>
+              <p className="text-[28px] font-semibold text-[#021526]">{maintenanceSpaces}</p>
             </div>
           </div>
         </div>
@@ -334,33 +351,33 @@ export default function Floor2() {
             <div className="bg-gray-50 rounded-[12px] p-4">
               <div className="flex items-center gap-2 mb-2">
                 <Activity className="w-3 h-3 text-gray-600" />
-                <span className="text-[12px] text-gray-600">Detected Rooms</span>
+                <span className="text-[12px] text-gray-600">Detected Spaces</span>
               </div>
-              <p className="text-[24px] font-semibold text-[#021526]">{occupiedRooms}</p>
-              <p className="text-[11px] text-gray-500">{Math.round((occupiedRooms/totalRooms)*100)}% occupied</p>
+              <p className="text-[24px] font-semibold text-[#021526]">{occupiedSpaces}</p>
+              <p className="text-[11px] text-gray-500">{Math.round((occupiedSpaces/totalSpaces)*100)}% occupied</p>
             </div>
           </div>
 
           <div className="mt-4 pt-4 border-t border-gray-200">
             <div className="flex items-center justify-between text-[13px]">
-              <span className="text-gray-600">East Wing</span>
+              <span className="text-gray-600">Main Hall</span>
               <Badge className="bg-green-100 text-green-700 border-0 text-[11px]">Online</Badge>
-            </div>
-            <div className="flex items-center justify-between text-[13px] mt-2">
-              <span className="text-gray-600">West Wing</span>
-              <Badge className="bg-green-100 text-green-700 border-0 text-[11px]">Online</Badge>
-            </div>
-            <div className="flex items-center justify-between text-[13px] mt-2">
-              <span className="text-gray-600">North Wing</span>
-              <Badge className="bg-green-100 text-green-700 border-0 text-[11px]">Online</Badge>
-            </div>
-            <div className="flex items-center justify-between text-[13px] mt-2">
-              <span className="text-gray-600">South Wing</span>
-              <Badge className="bg-red-100 text-red-700 border-0 text-[11px]">Offline</Badge>
             </div>
             <div className="flex items-center justify-between text-[13px] mt-2">
               <span className="text-gray-600">Central Area</span>
               <Badge className="bg-green-100 text-green-700 border-0 text-[11px]">Online</Badge>
+            </div>
+            <div className="flex items-center justify-between text-[13px] mt-2">
+              <span className="text-gray-600">Lounge Area</span>
+              <Badge className="bg-green-100 text-green-700 border-0 text-[11px]">Online</Badge>
+            </div>
+            <div className="flex items-center justify-between text-[13px] mt-2">
+              <span className="text-gray-600">Café Area</span>
+              <Badge className="bg-green-100 text-green-700 border-0 text-[11px]">Online</Badge>
+            </div>
+            <div className="flex items-center justify-between text-[13px] mt-2">
+              <span className="text-gray-600">Terrace Area</span>
+              <Badge className="bg-red-100 text-red-700 border-0 text-[11px]">Offline</Badge>
             </div>
           </div>
         </Card>
@@ -378,42 +395,42 @@ export default function Floor2() {
             <div className="flex items-start gap-3 pb-3 border-b border-gray-100">
               <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0 bg-green-500"></div>
               <div className="flex-1 min-w-0">
-                <p className="text-[13px] text-gray-800">Trần Thị B reserved meeting room MR-203</p>
+                <p className="text-[13px] text-gray-800">Trần Văn B reserved event hall EH-302</p>
                 <p className="text-[11px] text-gray-500 mt-1">09:15</p>
               </div>
             </div>
             <div className="flex items-start gap-3 pb-3 border-b border-gray-100">
               <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0 bg-orange-500"></div>
               <div className="flex-1 min-w-0">
-                <p className="text-[13px] text-gray-800">East Wing camera detected occupancy change</p>
+                <p className="text-[13px] text-gray-800">Main Hall camera detected occupancy change</p>
                 <p className="text-[11px] text-gray-500 mt-1">09:20</p>
               </div>
             </div>
             <div className="flex items-start gap-3 pb-3 border-b border-gray-100">
               <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0 bg-red-500"></div>
               <div className="flex-1 min-w-0">
-                <p className="text-[13px] text-gray-800">Payment overdue alert for PO-303</p>
+                <p className="text-[13px] text-gray-800">Payment overdue alert for CA-401</p>
                 <p className="text-[11px] text-gray-500 mt-1">09:25</p>
               </div>
             </div>
             <div className="flex items-start gap-3 pb-3 border-b border-gray-100">
               <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0 bg-blue-500"></div>
               <div className="flex-1 min-w-0">
-                <p className="text-[13px] text-gray-800">Hoàng Văn E checked out (PO-305)</p>
+                <p className="text-[13px] text-gray-800">Hoàng Thị E checked out (ONZ-501)</p>
                 <p className="text-[11px] text-gray-500 mt-1">09:30</p>
               </div>
             </div>
             <div className="flex items-start gap-3 pb-3 border-b border-gray-100">
               <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0 bg-green-500"></div>
               <div className="flex-1 min-w-0">
-                <p className="text-[13px] text-gray-800">Nguyễn Văn A checked in (MR-201)</p>
+                <p className="text-[13px] text-gray-800">Nguyễn Thị A checked in (EH-301)</p>
                 <p className="text-[11px] text-gray-500 mt-1">08:45</p>
               </div>
             </div>
             <div className="flex items-start gap-3 pb-3">
               <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0 bg-orange-500"></div>
               <div className="flex-1 min-w-0">
-                <p className="text-[13px] text-gray-800">Room MR-205 marked as maintenance by AI</p>
+                <p className="text-[13px] text-gray-800">Space EH-304 marked as maintenance by AI</p>
                 <p className="text-[11px] text-gray-500 mt-1">08:30</p>
               </div>
             </div>
@@ -421,9 +438,9 @@ export default function Floor2() {
         </Card>
       </div>
 
-      {/* Main Content - Room Map + Sidebar */}
+      {/* Main Content - Space Map + Sidebar */}
       <div className="grid grid-cols-[1fr_360px] gap-6">
-        {/* Room Map */}
+        {/* Space Map */}
         <div className="bg-white rounded-[20px] p-6 shadow-sm border border-gray-100">
           <div className="flex items-center justify-between mb-5">
             <h2 className="text-[22px] font-semibold text-[#021526]">Seat Map Layout</h2>
@@ -459,8 +476,9 @@ export default function Floor2() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">All Types</SelectItem>
-                      <SelectItem value="Meeting Room">Meeting Room</SelectItem>
-                      <SelectItem value="Private Office">Private Office</SelectItem>
+                      <SelectItem value="Event Hall">Event Hall</SelectItem>
+                      <SelectItem value="Conference Area">Conference Area</SelectItem>
+                      <SelectItem value="Open Networking Zone">Open Networking Zone</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -487,11 +505,15 @@ export default function Floor2() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">All Zones</SelectItem>
+                      <SelectItem value="Main Hall">Main Hall</SelectItem>
                       <SelectItem value="East Wing">East Wing</SelectItem>
                       <SelectItem value="West Wing">West Wing</SelectItem>
                       <SelectItem value="North Wing">North Wing</SelectItem>
-                      <SelectItem value="South Wing">South Wing</SelectItem>
                       <SelectItem value="Central Area">Central Area</SelectItem>
+                      <SelectItem value="South Wing">South Wing</SelectItem>
+                      <SelectItem value="Lounge Area">Lounge Area</SelectItem>
+                      <SelectItem value="Café Area">Café Area</SelectItem>
+                      <SelectItem value="Terrace Area">Terrace Area</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -500,9 +522,9 @@ export default function Floor2() {
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                     <Input
-                      placeholder="e.g., MR-201, PO-301"
-                      value={searchRoom}
-                      onChange={(e) => setSearchRoom(e.target.value)}
+                      placeholder="e.g., EH-301, CA-401, ONZ-501"
+                      value={searchSpace}
+                      onChange={(e) => setSearchSpace(e.target.value)}
                       className="pl-9 h-[36px] rounded-[8px]"
                     />
                   </div>
@@ -514,8 +536,8 @@ export default function Floor2() {
           {/* Floor Plan */}
           <div className="relative bg-gray-50 rounded-[16px] overflow-hidden border-2 border-gray-200 aspect-[4/3]">
             <img
-              src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1200&h=900&fit=crop"
-              alt="Floor 2 Plan - Meeting Rooms & Private Offices"
+              src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1200&h=900&fit=crop"
+              alt="Floor 3 Plan - Networking Space"
               className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/5"></div>
@@ -542,41 +564,41 @@ export default function Floor2() {
           </div>
         </div>
 
-        {/* Room List Sidebar */}
+        {/* Space List Sidebar */}
         <div className="bg-white rounded-[20px] p-6 shadow-sm border border-gray-100">
-          <h3 className="text-[18px] font-semibold text-[#021526] mb-5">Select Room</h3>
+          <h3 className="text-[18px] font-semibold text-[#021526] mb-5">Select Space</h3>
 
           {/* Search */}
           <div className="relative mb-6">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <Input
-              placeholder="Search room..."
-              value={searchRoom}
-              onChange={(e) => setSearchRoom(e.target.value)}
+              placeholder="Search space..."
+              value={searchSpace}
+              onChange={(e) => setSearchSpace(e.target.value)}
               className="pl-10 bg-gray-50 border-gray-200 rounded-[10px] h-[42px]"
             />
           </div>
 
-          {/* Room List */}
+          {/* Space List */}
           <div className="space-y-3 max-h-[600px] overflow-y-auto">
-            {filteredRooms.map((room) => (
+            {filteredSpaces.map((space) => (
               <div
-                key={room.id}
-                onClick={() => handleRoomClick(room)}
+                key={space.id}
+                onClick={() => handleSpaceClick(space)}
                 className="flex items-center justify-between p-4 rounded-[12px] border border-gray-200 hover:border-[#317752] hover:bg-gray-50 transition-all cursor-pointer"
               >
                 <div>
-                  <p className="text-[14px] font-semibold text-[#021526]">{room.id}</p>
-                  <p className="text-[12px] text-gray-500">{room.type} • {room.zone}</p>
-                  <p className="text-[11px] text-gray-400">Capacity: {room.capacity}</p>
+                  <p className="text-[14px] font-semibold text-[#021526]">{space.id}</p>
+                  <p className="text-[12px] text-gray-500">{space.type} • {space.zone}</p>
+                  <p className="text-[11px] text-gray-400">Capacity: {space.capacity}</p>
                 </div>
                 <Badge className={`${
-                  room.status === "Available" ? "bg-gray-100 text-gray-700" :
-                  room.status === "Occupied" ? "bg-blue-100 text-blue-700" :
-                  room.status === "Reserved" ? "bg-orange-100 text-orange-700" :
+                  space.status === "Available" ? "bg-gray-100 text-gray-700" :
+                  space.status === "Occupied" ? "bg-blue-100 text-blue-700" :
+                  space.status === "Reserved" ? "bg-orange-100 text-orange-700" :
                   "bg-red-100 text-red-700"
                 } border-0`}>
-                  {room.status}
+                  {space.status}
                 </Badge>
               </div>
             ))}
@@ -584,93 +606,93 @@ export default function Floor2() {
         </div>
       </div>
 
-      {/* Room Detail Sheet */}
-      <Sheet open={!!selectedRoom} onOpenChange={() => setSelectedRoom(null)}>
+      {/* Space Detail Sheet */}
+      <Sheet open={!!selectedSpace} onOpenChange={() => setSelectedSpace(null)}>
         <SheetContent className="w-[500px] rounded-l-[20px]">
           <SheetHeader>
             <SheetTitle className="text-[22px] font-semibold">
-              {selectedRoom?.type} {selectedRoom?.id}
+              {selectedSpace?.type} {selectedSpace?.id}
             </SheetTitle>
           </SheetHeader>
 
-          {selectedRoom && (
+          {selectedSpace && (
             <div className="mt-6 space-y-6">
               <div className="bg-gray-50 rounded-[12px] p-4">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-[14px] text-gray-600">Status</span>
                   <Badge className={`${
-                    selectedRoom.status === "Available" ? "bg-gray-100 text-gray-700" :
-                    selectedRoom.status === "Occupied" ? "bg-blue-100 text-blue-700" :
-                    selectedRoom.status === "Reserved" ? "bg-orange-100 text-orange-700" :
+                    selectedSpace.status === "Available" ? "bg-gray-100 text-gray-700" :
+                    selectedSpace.status === "Occupied" ? "bg-blue-100 text-blue-700" :
+                    selectedSpace.status === "Reserved" ? "bg-orange-100 text-orange-700" :
                     "bg-red-100 text-red-700"
                   } border-0`}>
-                    {selectedRoom.status}
+                    {selectedSpace.status}
                   </Badge>
                 </div>
                 <div className="flex items-center justify-between mt-2">
                   <span className="text-[14px] text-gray-600">Zone</span>
-                  <span className="text-[14px] font-medium text-[#021526]">{selectedRoom.zone}</span>
+                  <span className="text-[14px] font-medium text-[#021526]">{selectedSpace.zone}</span>
                 </div>
                 <div className="flex items-center justify-between mt-2">
                   <span className="text-[14px] text-gray-600">Capacity</span>
-                  <span className="text-[14px] font-medium text-[#021526]">{selectedRoom.capacity} people</span>
+                  <span className="text-[14px] font-medium text-[#021526]">{selectedSpace.capacity} people</span>
                 </div>
               </div>
 
-              {selectedRoom.user && (
+              {selectedSpace.user && (
                 <>
                   <div>
                     <h4 className="text-[15px] font-semibold text-[#021526] mb-3">User Information</h4>
                     <div className="space-y-3">
                       <div className="flex items-center gap-3">
                         <User className="w-4 h-4 text-gray-500" />
-                        <span className="text-[14px] text-gray-700">{selectedRoom.user.name}</span>
+                        <span className="text-[14px] text-gray-700">{selectedSpace.user.name}</span>
                       </div>
                       <div className="flex items-center gap-3">
                         <Mail className="w-4 h-4 text-gray-500" />
-                        <span className="text-[14px] text-gray-700">{selectedRoom.user.email}</span>
+                        <span className="text-[14px] text-gray-700">{selectedSpace.user.email}</span>
                       </div>
                       <div className="flex items-center gap-3">
                         <Phone className="w-4 h-4 text-gray-500" />
-                        <span className="text-[14px] text-gray-700">{selectedRoom.user.phone}</span>
+                        <span className="text-[14px] text-gray-700">{selectedSpace.user.phone}</span>
                       </div>
-                      {selectedRoom.user.company && (
+                      {selectedSpace.user.company && (
                         <div className="flex items-center gap-3">
                           <Building2 className="w-4 h-4 text-gray-500" />
-                          <span className="text-[14px] text-gray-700">{selectedRoom.user.company}</span>
+                          <span className="text-[14px] text-gray-700">{selectedSpace.user.company}</span>
                         </div>
                       )}
                     </div>
                   </div>
 
-                  {selectedRoom.booking && (
+                  {selectedSpace.booking && (
                     <div>
                       <h4 className="text-[15px] font-semibold text-[#021526] mb-3">Booking Details</h4>
                       <div className="space-y-3">
-                        {selectedRoom.booking.meetingTitle && (
+                        {selectedSpace.booking.eventTitle && (
                           <div>
-                            <span className="text-[13px] text-gray-600">Meeting Title</span>
-                            <p className="text-[13px] font-medium text-[#021526] mt-1">{selectedRoom.booking.meetingTitle}</p>
+                            <span className="text-[13px] text-gray-600">Event Title</span>
+                            <p className="text-[13px] font-medium text-[#021526] mt-1">{selectedSpace.booking.eventTitle}</p>
                           </div>
                         )}
                         <div className="flex justify-between">
                           <span className="text-[13px] text-gray-600">Package</span>
-                          <span className="text-[13px] font-medium text-[#021526]">{selectedRoom.booking.package}</span>
+                          <span className="text-[13px] font-medium text-[#021526]">{selectedSpace.booking.package}</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-[13px] text-gray-600">Period</span>
                           <span className="text-[13px] font-medium text-[#021526]">
-                            {selectedRoom.booking.startDate} - {selectedRoom.booking.endDate}
+                            {selectedSpace.booking.startDate} - {selectedSpace.booking.endDate}
                           </span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-[13px] text-gray-600">Payment</span>
                           <Badge className={`${
-                            selectedRoom.booking.paymentStatus === "Paid" ? "bg-green-100 text-green-700" :
-                            selectedRoom.booking.paymentStatus === "Pending" ? "bg-orange-100 text-orange-700" :
+                            selectedSpace.booking.paymentStatus === "Paid" ? "bg-green-100 text-green-700" :
+                            selectedSpace.booking.paymentStatus === "Pending" ? "bg-orange-100 text-orange-700" :
                             "bg-red-100 text-red-700"
                           } border-0 text-[11px]`}>
-                            {selectedRoom.booking.paymentStatus}
+                            {selectedSpace.booking.paymentStatus}
                           </Badge>
                         </div>
                       </div>
@@ -695,12 +717,12 @@ export default function Floor2() {
                 </>
               )}
 
-              {!selectedRoom.user && (
+              {!selectedSpace.user && (
                 <div className="text-center py-8">
-                  <p className="text-gray-500 mb-4">This room is available for booking</p>
+                  <p className="text-gray-500 mb-4">This space is available for booking</p>
                   <Button className="bg-[#317752] hover:bg-[#2a6545] text-white rounded-[10px]">
                     <Calendar className="w-4 h-4 mr-2" />
-                    Book Room
+                    Book Space
                   </Button>
                 </div>
               )}
