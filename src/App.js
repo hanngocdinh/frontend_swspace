@@ -28,6 +28,15 @@ import BookingHistoryPage from './pages/BookingHistoryPage';
 import PaymentMethodsPage from './pages/PaymentMethodsPage';
 import DebugPage from './pages/DebugPage';
 import FullBookingTestPage from './pages/FullBookingTestPage';
+
+// Team Booking Pages
+import TeamServicesPage from './pages/team-booking/TeamServicesPage';
+import DurationSelectionPage from './pages/team-booking/DurationSelectionPage';
+import DateSelectionPage from './pages/team-booking/DateSelectionPage';
+import RoomSelectionPage from './pages/team-booking/RoomSelectionPage';
+import TeamPaymentPage from './pages/team-booking/TeamPaymentPage';
+import TeamBookingConfirmationPage from './pages/team-booking/TeamBookingConfirmationPage';
+
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { BookingProvider } from './contexts/BookingContext';
 import { QRProvider } from './contexts/QRContext';
@@ -108,6 +117,7 @@ function App() {
               } />
               
               {/* Booking routes - Protected */}
+              <Route path="/booking" element={<Navigate to="/booking/service" replace />} />
               <Route path="/booking/service" element={
                 <ProtectedRoute>
                   <ServicePage />
@@ -136,6 +146,38 @@ function App() {
               <Route path="/booking/confirmation" element={
                 <ProtectedRoute>
                   <BookingConfirmationPage />
+                </ProtectedRoute>
+              } />
+              
+              {/* Team Booking routes - Protected */}
+              <Route path="/team-booking" element={
+                <ProtectedRoute>
+                  <TeamServicesPage />
+                </ProtectedRoute>
+              } />
+              <Route path="/team-booking/duration" element={
+                <ProtectedRoute>
+                  <DurationSelectionPage />
+                </ProtectedRoute>
+              } />
+              <Route path="/team-booking/date" element={
+                <ProtectedRoute>
+                  <DateSelectionPage />
+                </ProtectedRoute>
+              } />
+              <Route path="/team-booking/rooms" element={
+                <ProtectedRoute>
+                  <RoomSelectionPage />
+                </ProtectedRoute>
+              } />
+              <Route path="/team-booking/payment" element={
+                <ProtectedRoute>
+                  <TeamPaymentPage />
+                </ProtectedRoute>
+              } />
+              <Route path="/team-booking/confirmation" element={
+                <ProtectedRoute>
+                  <TeamBookingConfirmationPage />
                 </ProtectedRoute>
               } />
               

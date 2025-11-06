@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const HeroContainer = styled.section`
@@ -72,7 +73,7 @@ const CTAContainer = styled.div`
   }
 `;
 
-const CTAButton = styled.a`
+const CTAButton = styled.button`
   display: inline-block;
   padding: 0.8rem 1.5rem;
   background-color: ${props => props.primary ? '#45bf55' : 'transparent'};
@@ -83,6 +84,7 @@ const CTAButton = styled.a`
   text-decoration: none;
   transition: all 0.3s ease;
   cursor: pointer;
+  font-size: 1rem;
   
   &:hover {
     transform: translateY(-3px);
@@ -146,6 +148,16 @@ const VideoFrame = styled.div`
 `;
 
 const HeroSection = () => {
+  const navigate = useNavigate();
+
+  const handleTeamClick = () => {
+    navigate('/team-booking');
+  };
+
+  const handleFreelancerClick = () => {
+    navigate('/booking');
+  };
+
   return (
     <HeroContainer id="home">
       <HeroContent>
@@ -158,10 +170,10 @@ const HeroSection = () => {
             Here, you'll find everything you need to focus, connect, and grow - with meeting rooms designed for real collaboration. Most importantly, you'll be surrounded by a vibrant community of like-minded professionals.
           </HeroSubtitle>
           <CTAContainer>
-            <CTAButton primary href="#contact">
+            <CTAButton primary onClick={handleFreelancerClick}>
               YOU ARE A FREELANCER
             </CTAButton>
-            <CTAButton href="#contact">
+            <CTAButton onClick={handleTeamClick}>
               YOU ARE A TEAM
             </CTAButton>
           </CTAContainer>
