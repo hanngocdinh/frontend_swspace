@@ -8,6 +8,7 @@ import TeamPackagePage from "./pages/PackageManagement/TeamPackagePage";
 import Floor1Page from "./pages/SpaceManagement/Floor1Page";
 import Floor2Page from "./pages/SpaceManagement/Floor2Page";
 import Floor3Page from "./pages/SpaceManagement/Floor3Page";
+import ReportPage from "./pages/ReportsManagement/Reports";
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<string>("dashboard");
@@ -77,10 +78,7 @@ export default function App() {
       case "report":
         return (
           <DashboardLayout>
-            <div className="text-center py-20">
-              <h2 className="text-[24px] font-semibold mb-2">Report</h2>
-              <p className="text-gray-600">This page is under construction</p>
-            </div>
+            <ReportPage />
           </DashboardLayout>
         );
       case "settings":
